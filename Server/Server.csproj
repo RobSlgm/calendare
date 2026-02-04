@@ -25,7 +25,7 @@
     </ItemGroup>
     <!-- CONTAINER: END -->
     <PropertyGroup>
-        <RepositoryUrl>https://git.slgm.li/closure.ch/Calendare</RepositoryUrl>
+        <RepositoryUrl>https://github.com/closureOSS/calendare</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
     </PropertyGroup>

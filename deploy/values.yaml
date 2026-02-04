@@ -7,7 +7,7 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: registry.slgm.ch/library/calendare.server
+  repository: ghcr.io/closureOSS/calendare.server
   # -- This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # -- Overrides the image tag whose default is the chart appVersion.
@@ -16,7 +16,7 @@ image:
 migration:
   enabled: true
   image:
-    repository: registry.slgm.ch/library/calendare.migration
+    repository: ghcr.io/closureOSS/calendare.migration
     tag: ""
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

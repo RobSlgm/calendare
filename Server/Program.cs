@@ -52,7 +52,7 @@ try
                 );
 
 #if CLIENTCERT_AUTH
-    // https://learn.microsoft.com/en-us/aspnet/core/security/authentication/certauth?view=aspnetcore-9.0
+    // https://learn.microsoft.com/en-us/aspnet/core/security/authentication/certauth?view=aspnetcore-10.0
     builder.Services.Configure<KestrelServerOptions>(options =>
     {
         options.ConfigureHttpsDefaults(options =>
@@ -102,7 +102,7 @@ try
             Description = "Administration API for the Calendare Server",
             Contact = new OpenApiContact
             {
-                Url = new Uri("https://git.slgm.li/closure.ch/Calendare"),
+                Url = new Uri("https://github.com/closureOSS/calendare"),
             },
             License = new OpenApiLicense
             {
@@ -123,66 +123,6 @@ try
             [new OpenApiSecuritySchemeReference(JwtBearerDefaults.AuthenticationScheme, doc)] = [],
         });
     });
-    // builder.Services.AddOpenApi(c =>
-    // {
-    //     // c.CreateSchemaReferenceId = (type) =>
-    //     // {
-    //     //     if (type.Type == typeof(Instant))
-    //     //     {
-    //     //         return null; // Returning null forces the schema to be inlined
-    //     //     }
-    //     //     // Use the default behavior for all other types
-    //     //     return OpenApiOptions.CreateDefaultSchemaReferenceId(type);
-    //     // };
-    //     // c.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1;
-    //     c.AddSchemaTransformer((schema, context, ct) =>
-    //     {
-    //         if (context.JsonTypeInfo.Type == typeof(Instant))
-    //         {
-    //             schema.Format = "date-time";
-    //             schema.Type = JsonSchemaType.String;
-    //             // schema.Comment = "Date (UTC)";
-    //             // schema.DynamicRef = null;
-    //             // schema.Example = new JsonObject
-    //             // {
-    //             //     ["date"] = DateTime.UtcNow.ToString("yyyy-MM-dd"),
-    //             // };
-    //         }
-    //         return Task.CompletedTask;
-    //     });
-    //     c.AddOperationTransformer((operation, context, cancellationToken) =>
-    //     {
-    //         operation.Responses ??= [];
-    //         operation.Responses.Add("500", new OpenApiResponse
-    //         {
-    //             Description = "Internal server error",
-    //             //Content = { ["application/problem+json"] = new OpenApiMediaType { Schema = new OpenApiSchemaReference("Error", context.Document)}}
-    //             Content = new Dictionary<string, OpenApiMediaType>(StringComparer.Ordinal)
-    //             {
-    //                 ["application/problem+json"] = new OpenApiMediaType
-    //                 {
-    //                     Schema = new OpenApiSchemaReference(nameof(ProblemDetails), context.Document),
-    //                 },
-    //             },
-    //         });
-    //         return Task.CompletedTask;
-    //     });
-    //     c.AddDocumentTransformer((document, context, cancellationToken) =>
-    //     {
-    //         document.Info = new()
-    //         {
-    //             Title = "Calendare Server",
-    //             Version = ThisAssembly.AssemblyFileVersion,
-    //             Description = "Administration API for the Calendare Server",
-    //             License = new OpenApiLicense
-    //             {
-    //                 Name = "MIT",
-    //                 Url = new Uri("https://mit-license.org/"),
-    //             },
-    //         };
-    //         return Task.CompletedTask;
-    //     });
-    // });
 
     builder.Services.AddRequestDecompression();
     builder.Services.AddCors(options =>
@@ -208,7 +148,6 @@ try
     builder.Services.Configure<JwtBearerProviderOptions>(builder.Configuration.GetSection("JwtBearer"));
     builder.Services.ConfigureJwtBearerProvider();
 
-    // builder.Services.ConfigureJwtBearer(builder.Configuration.GetSection("JwtBearer").Get<JwtBearerProviderOptions>());
     builder.Services
         .AddAuthentication(opts =>
         {
@@ -273,7 +212,7 @@ try
     builder.Services.Configure<RecorderOptions>(builder.Configuration.GetSection("Recorder"));
     // builder.Services.AddHttpLogging(o =>
     // {
-    //     // https://learn.microsoft.com/en-us/aspnet/core/fundamentals/http-logging/?view=aspnetcore-9.0
+    //     // https://learn.microsoft.com/en-us/aspnet/core/fundamentals/http-logging/?view=aspnetcore-10.0
     //     o.CombineLogs = true;
     //     o.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
     //     o.RequestBodyLogLimit = 4096;
@@ -284,8 +223,6 @@ try
 
     if (app.Environment.IsDevelopment())
     {
-        // app.UseSwaggerUI();
-        // app.MapOpenApi("/openapi/{documentName}/openapi.{extension:regex(^(json|ya?ml)$)}");
         app.MapSwagger("/openapi/{documentName}/openapi.{extension:regex(^(json|ya?ml)$)}", options =>
         {
             options.OpenApiVersion = OpenApiSpecVersion.OpenApi3_0;
