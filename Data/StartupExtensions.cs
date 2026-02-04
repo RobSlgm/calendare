@@ -37,7 +37,7 @@ public static class StartupExtensions
 
     private static string GetConnectionStringPostgresOptions(this IConfigurationSection configuration)
     {
-        var options = configuration.Get<PostgresOptions>() ?? throw new InvalidOperationException("Datasource must be configured");
+        var options = configuration.Get<PostgresOptions>() ?? new PostgresOptions { ConnectionString = "Host=calendare-cluster-rw;Username=app;Database=app;" };
 
         var csb = new NpgsqlConnectionStringBuilder(options.ConnectionString)
         {

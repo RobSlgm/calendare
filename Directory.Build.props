@@ -8,7 +8,7 @@
     </ItemGroup>
     <PropertyGroup>
         <Company>closure.ch</Company>
-        <Copyright>© 2024-2025 Robert Bill</Copyright>
+        <Copyright>© 2024-2026 Closure OSS Contributors</Copyright>
         <Product>Calendare</Product>
         <Authors>Robert Bill</Authors>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>

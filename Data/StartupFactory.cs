@@ -5,16 +5,17 @@ using Microsoft.Extensions.Configuration;
 
 namespace Calendare.Data;
 
-public class TestContextFactory : IDesignTimeDbContextFactory<CalendareContext>
+public class StartupFactory : IDesignTimeDbContextFactory<CalendareContext>
 {
-    public TestContextFactory() { }
+    public StartupFactory() { }
 
     public CalendareContext CreateDbContext(string[] args)
     {
-
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddUserSecrets<TestContextFactory>()
+            .AddUserSecrets<StartupFactory>()
+            // .AddJsonFile("appsettings.json", true)
+            .AddEnvironmentVariables()
             .Build();
         var optionsBuilder = new DbContextOptionsBuilder<CalendareContext>();
         optionsBuilder.ConfigureCalendareNpgsql(configuration.GetSection("Postgresql"));

@@ -1,0 +1,19 @@
+apiVersion: v2
+name: calendare
+description: Calendare - A Caldav/Carddav server
+home: https://git.slgm.li/closure.ch/Calendare
+keywords:
+  - caldav
+  - carddav
+  - calendar
+  - server
+# icon:
+sources:
+  - https://git.slgm.li/closure.ch/Calendare/src/deploy
+  - https://git.slgm.li/closure.ch/Calendare/src/Server
+
+type: application
+
+version: 0.6.0
+
+appVersion: "0.6.0"

@@ -35,6 +35,10 @@ public class DavEnvironmentRepository
             {
                 decision = true;
             }
+            if (defaultClient.Disable.Contains(feature))
+            {
+                decision = false;
+            }
         }
         var actualClient = Features.FirstOrDefault(c => c.ClientType == calendarClientType);
         if (actualClient is not null)
@@ -43,7 +47,7 @@ public class DavEnvironmentRepository
             {
                 return false;
             }
-            else if (actualClient.Enable.Contains(feature))
+            if (actualClient.Enable.Contains(feature))
             {
                 return true;
             }
