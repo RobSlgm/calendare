@@ -7,16 +7,21 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: ghcr.io/closureOSS/calendare.server
+  repository: registry.slgm.ch/library/calendare.server
   # -- This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # -- Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
+# -- Database schema migration during installation (use with caution)
+# @default -- {}
 migration:
-  enabled: true
+  # -- Enable automatic schema migration
+  enabled: false
+  # -- Image for migration program
+  # @default -- {}
   image:
-    repository: ghcr.io/closureOSS/calendare.migration
+    repository: registry.slgm.ch/library/calendare.migration
     tag: ""
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -87,6 +92,7 @@ httpRoute:
   # HTTPRoute annotations.
   annotations: {}
   # -- Which Gateways this Route is attached to.
+  # @default -- {}
   parentRefs:
   - name: gateway
     sectionName: http
@@ -119,30 +125,30 @@ httpRoute:
 
 # -- Calendare Server configuration
 calendare: {}
-  # // -- Test mode allows the completely clear the database and other unsafe API calls
-  # // Never enable on production systems
+  # -- Test mode allows the completely clear the database and other unsafe API calls
+  #  Never enable on production systems
   # enableTestMode: "false"
-  # // Prefix of URI, must be distinct from /api and /health
+  # -- Prefix of URI, must be distinct from /api and /health
   # pathBase: "/caldav.php"
-  # // Define the initial admin password (otherwise a initial admin password is generated and stored as secret)
-  # // External Postgresql connection information as secret
+  # -- Define the initial admin password (otherwise a initial admin password is generated and stored as secret)
+  #    External Postgresql connection information as secret
   # existingDbmsSecret: calendare-cluster-app
-  # // Transaction recorder
+  # -- Transaction recorder
   # recorder: {}
   #   enabled: false
   #   path: "/tmp"
   # feature: {}
   #   xx: false
-  # // definition for the root administrator
+  # -- definition for the root administrator
   # existingAdminSecret: calendare-admin
-  # // -OR- define admin with, where at least password is required
+  # -- -OR- define admin with, where at least password is required
   # administrator:
   #   password: "7MuYMTRwsz7Jh45AqwnqnM"
   #   username: "admin"
   #   email:  "calendare@closure.ch"
   #   locale: "de-CH"
   #   displayName: "Administrator"
-  # // -OR- leave empty and without existing secret for default admin values with generated password (stored in generated secret)
+  # -- -OR- leave empty and without existing secret for default admin values with generated password (stored in generated secret)
 
 # -- WebPush configuration
 webpush: {}

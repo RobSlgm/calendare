@@ -18,8 +18,7 @@
 - [RFC 6764 - Locating Services for Calendaring Extensions to WebDAV (CalDAV) and vCard Extensions to WebDAV (CardDAV)](https://datatracker.ietf.org/doc/html/rfc6764)
   - DNS entries SRV/TXT \_carddavs.\_tcp and \_caldavs.\_tcp
 - [RFC 7953 - Calendar Availability](https://datatracker.ietf.org/doc/html/rfc7953)
-  - TODO: Priority support in free busy calculations for VAVAILABILITY components
-- Draft [specification for WebDAV Push](https://github.com/bitfireAT/webdav-push), for [HTTP Push](https://datatracker.ietf.org/doc/html/rfc8030), [Message encryption for Web Push](https://datatracker.ietf.org/doc/html/rfc8291), [VAPID keys](https://datatracker.ietf.org/doc/html/rfc8292)
+- [Draft specification for WebDAV Push](https://github.com/bitfireAT/webdav-push), for [HTTP Push](https://datatracker.ietf.org/doc/html/rfc8030), [Message encryption for Web Push](https://datatracker.ietf.org/doc/html/rfc8291), [VAPID keys](https://datatracker.ietf.org/doc/html/rfc8292)
 
 ### iCalendar specification
 
@@ -58,19 +57,9 @@
 
 # Further references
 
-- [CalConnect - Work projects](https://www.calconnect.org/about/major-work-projects) and for [development](https://devguide.calconnect.org)
+- [Collection of relevant RFC's](https://greenbytes.de/tech/webdav/)
 - [Google CalDAV Api developer's guide](https://developers.google.com/calendar/caldav/v2/guide?hl=en)
 - [Summary of CalDAV](https://www.aurinko.io/blog/caldav-apple-calendar-integration/), [SABRE CalDAV](https://sabre.io/dav/building-a-caldav-client/) or [SABRE CardDAV](https://sabre.io/dav/building-a-carddav-client/)
 - [Summary of Discovery](https://www.atmail.com/blog/caldav-carddav/)
 - [General](https://wiki.wocommunity.org/xwiki/bin/view/~probert/Home/CalDAV%20and%20CardDAV/CalDAV%20and%20CardDAV%20properties/)
-- [Handshake from a Apple Calendar (~2013)](https://wiki.wocommunity.org/xwiki/bin/view/~probert/Home/CalDAV%20and%20CardDAV/CalDAV%20and%20CardDAV%20handshake/)
-- [RFCs supported by Zimbra's CalDAV implementation](https://wiki.zimbra.com/wiki/CalDav_Support)
-- [Open Exchange implementation details](https://documentation.open-xchange.com/7.10.6/middleware/calendar/implementation_details.html)
-- [Cyrus IMAP Scheduling Flowchart](https://www.cyrusimap.org/imap/developer/thoughts/caldav_scheduling_flowchart.html)
 - [DAVx5 Synchronization Logic](https://manual.davx5.com/technical_information.html)
-- [CREATED, DTSTAMP, LAST-MODIFIED ???](https://stackoverflow.com/questions/11594921/whats-the-difference-between-created-and-dtstamp-in-the-icalendar-format)
-- [Collection of relevant RFC's](https://greenbytes.de/tech/webdav/)
-
-## Tools
-
-- [Typescript Client](https://tsdav.vercel.app/)

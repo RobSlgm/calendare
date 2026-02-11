@@ -2,7 +2,7 @@
 
 
 
-![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.6.0](https://img.shields.io/badge/AppVersion-0.6.0-informational?style=flat-square) 
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.6.0](https://img.shields.io/badge/AppVersion-0.6.0-informational?style=flat-square)
 
 [Calendare - A Caldav/Carddav server](https://github.com/closureOSS/calendare)
 
@@ -168,10 +168,10 @@ If a client is not configured in `calendare.features` the in-built settings are 
 | httpRoute | object | {} | Expose the service via gateway-api HTTPRoute Requires Gateway API resources and suitable controller installed within the cluster (see: https://gateway-api.sigs.k8s.io/guides/) |
 | httpRoute.enabled | bool | `false` | use either ingress or HTTPRoute (gateway API) |
 | httpRoute.hostnames | list | `["chart-example.local"]` | Hostnames matching HTTP header. |
-| httpRoute.parentRefs | list | `[{"name":"gateway","sectionName":"http"}]` | Which Gateways this Route is attached to. |
+| httpRoute.parentRefs | list | {} | Which Gateways this Route is attached to. |
 | httpRoute.rules | list | {} | List of rules and filters applied. |
 | image.pullPolicy | string | `"IfNotPresent"` | This sets the pull policy for images. |
-| image.repository | string | `"ghcr.io/closureOSS/calendare.server"` |  |
+| image.repository | string | `"registry.slgm.ch/library/calendare.server"` |  |
 | image.tag | string | `""` | Overrides the image tag whose default is the chart appVersion. |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |
@@ -185,9 +185,9 @@ If a client is not configured in `calendare.features` the in-built settings are 
 | livenessProbe.httpGet.path | string | `"/health"` |  |
 | livenessProbe.httpGet.port | string | `"metric"` |  |
 | metric.port | int | `5001` |  |
-| migration.enabled | bool | `true` |  |
-| migration.image.repository | string | `"ghcr.io/closureOSS/calendare.migration"` |  |
-| migration.image.tag | string | `""` |  |
+| migration | object | {} | Database schema migration during installation (use with caution) |
+| migration.enabled | bool | `false` | Enable automatic schema migration |
+| migration.image | object | {} | Image for migration program |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
 | podAnnotations | object | `{}` |  |
