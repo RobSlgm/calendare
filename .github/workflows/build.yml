@@ -34,16 +34,19 @@ jobs:
         with:
           setAllVars: true
 
-      - name: Log in to slgm.ch Registry
+      - name: Log in to registry
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish server container to private registry
+      - name: Publish server container to registry
         run: |
-          dotnet publish --os linux --arch x64 /t:PublishContainer /p:ContainerImageTags='"${{ steps.meta.outputs.SemVer2 }};${{ steps.meta.outputs.MajorMinorVersion }};${{ steps.meta.outputs.Version }};latest"' -p ContainerRegistry=ghcr.io
+          dotnet publish --os linux --arch x64 /t:PublishContainer \
+            /p:ContainerImageTags='"${{ steps.meta.outputs.SemVer2 }};${{ steps.meta.outputs.MajorMinorVersion }};${{ steps.meta.outputs.Version }};latest"' \
+            -p ContainerRegistry=ghcr.io \
+            -p ContainerRepository=${{ env.IMAGE_NAME }}
 
       - name: Build database migration
         working-directory: Data
