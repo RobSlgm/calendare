@@ -12,7 +12,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
   CHART_REPO: charts
 
 jobs:
@@ -44,10 +43,6 @@ jobs:
           echo "repository_lc=$REPOSITORY_LC" >> $GITHUB_OUTPUT
           REPOSITORY_OWNER_LC=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
           echo "repository_owner_lc=$REPOSITORY_OWNER_LC" >> $GITHUB_OUTPUT
-          SERVER_IMAGE_NAME=$(echo "${{ github.repository }}.server" | tr '[:upper:]' '[:lower:]')
-          echo "server_image_name=$SERVER_IMAGE_NAME" >> $GITHUB_OUTPUT
-          MIGRATION_IMAGE_NAME=$(echo "${{ github.repository }}.migration" | tr '[:upper:]' '[:lower:]')
-          echo "migration_image_name=$MIGRATION_IMAGE_NAME" >> $GITHUB_OUTPUT
 
       - name: Log in to registry
         uses: docker/login-action@v3
@@ -57,11 +52,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish server container to registry
+        env:
+          REPOSITORY_LC: ${{ steps.migr.outputs.repository_lc }}
+          IMAGE_NAME: "calendare-server"
         run: |
           dotnet publish --os linux --arch x64 /t:PublishContainer \
             /p:ContainerImageTags='"${{ steps.meta.outputs.SemVer2 }};${{ steps.meta.outputs.MajorMinorVersion }};${{ steps.meta.outputs.Version }};latest"' \
             -p ContainerRegistry=${{ env.REGISTRY }} \
-            -p ContainerRepository=${{ steps.migr.outputs.server_image_name }}
+            -p ContainerRepository=${REPOSITORY_LC}/${IMAGE_NAME}
 
       - name: Build database migration
         working-directory: Data
@@ -83,14 +81,15 @@ jobs:
             BUILD_DATE=${{ steps.meta.outputs.GitCommitDate }}
             SEMVER2=${{ steps.meta.outputs.SemVer2 }}
           tags: |
-            ${{ env.REGISTRY }}/${{ steps.migr.outputs.migration_image_name }}:latest
-            ${{ env.REGISTRY }}/${{ steps.migr.outputs.migration_image_name }}:${{ steps.meta.outputs.SemVer2 }}
-            ${{ env.REGISTRY }}/${{ steps.migr.outputs.migration_image_name }}:${{ steps.meta.outputs.MajorMinorVersion }}
-            ${{ env.REGISTRY }}/${{ steps.migr.outputs.migration_image_name }}:${{ steps.meta.outputs.Version }}
+            ${{ env.REGISTRY }}/${{ steps.migr.outputs.repository_lc }}/calendare-migration:latest
+            ${{ env.REGISTRY }}/${{ steps.migr.outputs.repository_lc }}/calendare-migration:${{ steps.meta.outputs.SemVer2 }}
+            ${{ env.REGISTRY }}/${{ steps.migr.outputs.repository_lc }}/calendare-migration:${{ steps.meta.outputs.MajorMinorVersion }}
+            ${{ env.REGISTRY }}/${{ steps.migr.outputs.repository_lc }}/calendare-migration:${{ steps.meta.outputs.Version }}
 
       - name: Push Helm chart
         env:
           VERSION: ${{ steps.meta.outputs.SemVer2 }}
+          REPOSITORY_OWNER_LC: ${{ steps.migr.outputs.repository_owner_lc }}
         run: |
           helm package ./deploy --version "$VERSION" --app-version "$VERSION"
-          helm push calendare-${VERSION}.tgz oci://${{ env.REGISTRY }}/${{ steps.migr.outputs.repository_owner_lc }}/${{ env.CHART_REPO }}
+          helm push calendare-${VERSION}.tgz oci://${{ env.REGISTRY }}/${REPOSITORY_OWNER_LC}/${{ env.CHART_REPO }}
