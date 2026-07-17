@@ -21,7 +21,7 @@ namespace Calendare.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "10.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "collection_sub_type", new[] { "calendar_proxy_read", "calendar_proxy_write", "default", "scheduling_inbox", "scheduling_outbox", "web_push_subscription" });
@@ -134,6 +134,11 @@ namespace Calendare.Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("schedule_transparency");
 
+                    b.Property<string>("Segment")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("segment");
+
                     b.Property<string>("Timezone")
                         .HasColumnType("text")
                         .HasColumnName("timezone");
@@ -146,9 +151,6 @@ namespace Calendare.Data.Migrations
                     b.HasKey("Id")
                         .HasName("pk_collection");
 
-                    b.HasAlternateKey("Uri")
-                        .HasName("ak_collection_uri");
-
                     b.HasIndex("OwnerId")
                         .HasDatabaseName("ix_collection_owner_id");
 
@@ -157,6 +159,10 @@ namespace Calendare.Data.Migrations
 
                     b.HasIndex("PrincipalTypeId")
                         .HasDatabaseName("ix_collection_principal_type_id");
+
+                    b.HasIndex("Uri")
+                        .IsUnique()
+                        .HasDatabaseName("ix_collection_uri");
 
                     b.ToTable("collection", (string)null);
                 });
@@ -243,6 +249,11 @@ namespace Calendare.Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("schedule_tag");
 
+                    b.Property<string>("Segment")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("segment");
+
                     b.Property<string>("Uid")
                         .IsRequired()
                         .HasColumnType("text")
@@ -261,9 +272,6 @@ namespace Calendare.Data.Migrations
                     b.HasKey("Id")
                         .HasName("pk_collection_object");
 
-                    b.HasAlternateKey("Uri")
-                        .HasName("ak_collection_object_uri");
-
                     b.HasIndex("ActualUserId")
                         .HasDatabaseName("ix_collection_object_actual_user_id");
 
@@ -272,6 +280,10 @@ namespace Calendare.Data.Migrations
 
                     b.HasIndex("OwnerId")
                         .HasDatabaseName("ix_collection_object_owner_id");
+
+                    b.HasIndex("Uri")
+                        .IsUnique()
+                        .HasDatabaseName("ix_collection_object_uri");
 
                     b.ToTable("collection_object", (string)null);
                 });
@@ -462,6 +474,69 @@ namespace Calendare.Data.Migrations
                         .HasDatabaseName("ix_address_collection_object_id");
 
                     b.ToTable("address", (string)null);
+                });
+
+            modelBuilder.Entity("Calendare.Data.Models.ObjectBlob", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"));
+
+                    b.Property<int>("CollectionObjectId")
+                        .HasColumnType("integer")
+                        .HasColumnName("collection_object_id");
+
+                    b.Property<long?>("ContentLength")
+                        .HasColumnType("bigint")
+                        .HasColumnName("content_length");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("content_type");
+
+                    b.Property<Instant>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("text")
+                        .HasColumnName("display_name");
+
+                    b.Property<string>("LanguageCode")
+                        .HasColumnType("text")
+                        .HasColumnName("language_code");
+
+                    b.Property<Instant>("LastAccess")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_access")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("location");
+
+                    b.Property<Instant>("Modified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("modified")
+                        .HasDefaultValueSql("now()");
+
+                    b.HasKey("Id")
+                        .HasName("pk_object_blob");
+
+                    b.HasIndex("CollectionObjectId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_object_blob_collection_object_id");
+
+                    b.ToTable("object_blob", (string)null);
                 });
 
             modelBuilder.Entity("Calendare.Data.Models.ObjectCalendar", b =>
@@ -1022,6 +1097,14 @@ namespace Calendare.Data.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("credential_type_id");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Issuer")
+                        .HasColumnType("text")
+                        .HasColumnName("issuer");
+
                     b.Property<Instant?>("LastUsed")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_used");
@@ -1231,6 +1314,17 @@ namespace Calendare.Data.Migrations
                     b.Navigation("CollectionObject");
                 });
 
+            modelBuilder.Entity("Calendare.Data.Models.ObjectBlob", b =>
+                {
+                    b.HasOne("Calendare.Data.Models.CollectionObject", "CollectionObject")
+                        .WithOne("BlobItem")
+                        .HasForeignKey("Calendare.Data.Models.ObjectBlob", "CollectionObjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("fk_object_blob_collection_object_collection_object_id");
+
+                    b.Navigation("CollectionObject");
+                });
+
             modelBuilder.Entity("Calendare.Data.Models.ObjectCalendar", b =>
                 {
                     b.HasOne("Calendare.Data.Models.CollectionObject", "CollectionObject")
@@ -1348,6 +1442,8 @@ namespace Calendare.Data.Migrations
             modelBuilder.Entity("Calendare.Data.Models.CollectionObject", b =>
                 {
                     b.Navigation("AddressItem");
+
+                    b.Navigation("BlobItem");
 
                     b.Navigation("CalendarItem");
                 });
